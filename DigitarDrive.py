@@ -1,5 +1,6 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from gspread_formatting import *
 import csv
 import json
 
@@ -57,6 +58,46 @@ def atualizar_drive(config):
     #print(f'Lista de alunos carregada com sucesso! Total de {len(ALUNOS)} alunos.')
     #print(ALUNOS)
 
+    #criar uma aba com o resumo das notas para cada aluno. 
+    # Notas de cada aluno na mesma linha. 
+    # Disciplins em colunas
+    def elaborarResumo():
+        # Extrair os nomes das disciplinas para montar o cabeçalho
+        disciplinas = []
+        abreviaturaDisciplinas = []
+        aba = planilha.worksheet("resumo")
+        
+        for info_disciplinas in ALUNOS.values():
+            for info in info_disciplinas:
+                if info['Disciplina'] not in disciplinas:
+                    #considera só o texto depois - na disciplina
+                    abreviatura = info['Disciplina'].split(' - ')[1].strip()
+                    abreviaturaDisciplinas.append(abreviatura)
+                    disciplinas.append(info['Disciplina'])
+
+        # Cabeçalhos com 'Aluno' seguido das disciplinas
+        header = ['Aluno'] + abreviaturaDisciplinas
+
+        # Lista para armazenar todas as linhas que serão enviadas para a planilha
+        dados_para_inserir = [header]  # Adiciona o cabeçalho como a primeira linha
+
+        # Iterando sobre os alunos e suas disciplinas para preencher as notas
+        for aluno, info_disciplinas in ALUNOS.items():
+            linha = [aluno]  # Inicia a linha com o nome do aluno
+            notas_aluno = {disc['Disciplina']: disc['Nota 1º trimestre'] for disc in info_disciplinas}
+
+            # Adiciona as notas para as disciplinas na ordem do cabeçalho
+            for disciplina in disciplinas:
+                linha.append(notas_aluno.get(disciplina, ''))  # Se não houver nota, coloca em branco
+
+            dados_para_inserir.append(linha)
+
+
+        aba.update(values=dados_para_inserir, range_name='A1', value_input_option='USER_ENTERED')
+
+        print(f'Notas do(a) aluno(a) resumidas com sucesso!')
+
+
 
     #imprimir notas de todos os alunos
     def imprimir_notas_alunos():
@@ -75,6 +116,44 @@ def atualizar_drive(config):
 
             print('---')
 
+    def definir_formatacao():
+        # Define o intervalo em que deseja aplicar a formatação condicional (exemplo: notas da célula B2 até F10)
+        range_notas = 'B2:P36'
+        aba = planilha.worksheet("resumo")
+        # Criando as regras de formatação condicional
+        # 1. Formatação para células com valor > 7 (Verde)
+        rule_mais_6 = ConditionalFormatRule(
+            ranges=[GridRange.from_a1_range(range_notas, aba)],
+            booleanRule=BooleanRule(
+                condition=BooleanCondition('NUMBER_GREATER', ['6']),# Cor de fundo verde puro                
+                format=CellFormat(backgroundColor=Color(0, 1, 0))
+        ))
+
+        # 2. Formatação para células com valor < 5 (Vermelho)
+        rule_menos_5 = ConditionalFormatRule(
+            ranges=[GridRange.from_a1_range(range_notas, aba)],
+            booleanRule=BooleanRule(
+                condition=BooleanCondition('NUMBER_LESS', ['5']), # Cor de fundo vermelho forte                
+                format=CellFormat(backgroundColor=Color(1, 0, 0))
+            )
+        )
+
+        # 3. Formatação para células com valor entre 5 e 5.9 (Amarelo)
+        rule_entre_5_59 = ConditionalFormatRule(
+            ranges=[GridRange.from_a1_range(range_notas, aba)],
+            booleanRule=BooleanRule(
+                condition=BooleanCondition('NUMBER_BETWEEN', ['5', '5,90']),  # Note que o segundo valor é '5.90'
+                format=CellFormat(backgroundColor=Color(0.95, 0.95, 0.85))  # Cor de fundo amarelo claro
+            )
+        )
+
+        # Adicionando as regras à planilha
+        rules = get_conditional_format_rules(aba)
+        rules.append(rule_mais_6)
+        rules.append(rule_entre_5_59)
+        rules.append(rule_menos_5)
+        rules.save()
+    
     def atualizarDrive():
         #para cada aluno em ALUNOS, recuperar as notas
         for aluno in ALUNOS:
@@ -95,7 +174,9 @@ def atualizar_drive(config):
             aba.update(range_name=intervalo, values=inserirNotas, value_input_option='USER_ENTERED')
             print(f'Notas do(a) aluno(a) {nome} atualizadas com sucesso!')
 
-    atualizarDrive()
+    #atualizarDrive()
+    elaborarResumo()
+    definir_formatacao()
     #print("Notas dos alunos atualizadas com sucesso no Google Sheets!")
     #imprimir_notas_alunos()
 
