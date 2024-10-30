@@ -32,6 +32,7 @@ class InterfaceGrafica:
         self.file_menu.add_command(label="1 - Carregar Configurações", command=self.carregar_configuracoes)
         self.file_menu.add_command(label="2 - Extrair Notas do SIGAA para CSV", command=self.extrair_notas)
         self.file_menu.add_command(label="3 - Exportar Dados CSV para Google Sheets", command=self.exportar_google_sheets)
+        self.file_menu.add_command(label="4 - Resumir Trimestres no Google Sheets", command=self.resumir_trimestres)
         self.file_menu.add_separator()
         self.file_menu.add_command(label="Limpar Log", command=self.limpar_log)
         self.file_menu.add_separator()
@@ -80,6 +81,17 @@ class InterfaceGrafica:
         else:
             print("As configurações não foram carregadas. Carregue as configurações antes de exportar para o Google Sheets.")
 
+    def resumir_trimestres(self):
+        if self.configuracoes:
+            try:
+                DigitarDrive.resumir_trimestres(self.configuracoes)
+                print("----------------------------------------------------------")
+                print("Trimestres resumidos com sucesso no Google Sheets!")
+            except Exception as e:
+                print("Ocorreu um erro ao resumir trimstres no Google Sheets:", e)
+        else:
+            print("As configurações não foram carregadas. Carregue as configurações antes de exportar para o Google Sheets.")
+
     def limpar_log(self):
         self.log_text.delete(1.0, tk.END)
 
@@ -94,9 +106,11 @@ class InterfaceGrafica:
             "   Após carregar as configurações, clique em 'Ações' -> '2 - Extrair Notas do SIGAA para CSV' para iniciar a extração das notas.\n\n"
             "5. Exportar Dados CSV para Google Sheets:\n"
             "   Após extrair as notas, clique em 'Ações' -> '3 - Exportar Dados CSV para Google Sheets' para exportar os dados para o Google Sheets.\n\n"
-            "6. Limpar Log:\n"
+            "6. Resumir Trimestres:\n"
+            "   Após extrair as notas, clique em 'Ações' -> '4 - Resumir Trimestres' para resumir os trimestres no Google Sheets.\n\n"
+            "7. Limpar Log:\n"
             "   Clique em 'Ações' -> 'Limpar Log' para limpar a área de log.\n\n"
-            "7. Sair:\n"
+            "8. Sair:\n"
             "   Clique em 'Ações' -> 'Sair' para fechar o aplicativo.\n\n\n"
             "As configurações no arquivo \"config.json\": são\n\n"
             "- \"URL\": \"https://sig.ifc.edu.br/sigaa/verTelaLogin.do\", URL do SIGAA.\n"
