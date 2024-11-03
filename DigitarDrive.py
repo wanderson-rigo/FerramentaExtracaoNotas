@@ -209,10 +209,17 @@ def resumir_trimestres(config):
             aba.update_index(i-1)
             print(f"Resumo {i} atualizado com sucesso!")
 
-    atualizar_drive(config)
-    resumir_trimestres()
+    # se ALUNOS estiver vazio, ler arquivo CSV, senão atualizar a planilha
+    if not ALUNOS:
+        print("Lista de notas vazia. Carregando arquivo CSV...")
+        carregarCSV(config)
+        resumir_trimestres()
+    else:
+        print("Lista de alunos já carregada. Atualizando notas no Google Sheets...")
+        resumir_trimestres()
+        return
 
-def atualizar_drive(config):
+def carregarCSV(config):
     # Escopo da API e credenciais
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     credentials = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
@@ -265,53 +272,56 @@ def atualizar_drive(config):
         arquivo_csv.close()
 
     #print(f'Lista de alunos carregada com sucesso! Total de {len(ALUNOS)} alunos.')
-    #print(ALUNOS)    
-    
+    #print(ALUNOS)
 
-    #imprimir notas de todos os alunos
-    def imprimir_notas_alunos():
-        for aluno in ALUNOS:
-            nome = aluno
-            print(f'Aluno: {aluno}')
-            print(f'Notas:')
-            notas = ALUNOS[aluno]
+def atualizar_drive(config):
 
-            for nota in notas:
-                print(f'Disciplina: {nota["Disciplina"]}')
-                print(f'Nota 1º trimestre: {nota["Nota 1º trimestre"]}')
-                print(f'Nota 2º trimestre: {nota["Nota 2º trimestre"]}')
-                print(f'Nota 3º trimestre: {nota["Nota 3º trimestre"]}')
-                print('---')
+    # se ALUNOS estiver vazio, ler arquivo CSV, senão atualizar a planilha
+    if not ALUNOS:
+        print("Lista de notas vazia. Carregando arquivo CSV...")
+        carregarCSV(config)
+        atualizarDrive()
+    else:
+        print("Lista de alunos já carregada. Atualizando notas no Google Sheets...")
+        atualizarDrive()
+        return 
 
+#imprimir notas de todos os alunos
+def imprimir_notas_alunos():
+    for aluno in ALUNOS:
+        nome = aluno
+        print(f'Aluno: {aluno}')
+        print(f'Notas:')
+        notas = ALUNOS[aluno]
+
+        for nota in notas:
+            print(f'Disciplina: {nota["Disciplina"]}')
+            print(f'Nota 1º trimestre: {nota["Nota 1º trimestre"]}')
+            print(f'Nota 2º trimestre: {nota["Nota 2º trimestre"]}')
+            print(f'Nota 3º trimestre: {nota["Nota 3º trimestre"]}')
             print('---')
 
-    
+        print('---')
 
-    
+def atualizarDrive():
+    #para cada aluno em ALUNOS, recuperar as notas
+    for aluno in ALUNOS:
+        nome = aluno
+        notas = ALUNOS[aluno]
+        inserirNotas = []
 
-    
-    def atualizarDrive():
-        #para cada aluno em ALUNOS, recuperar as notas
-        for aluno in ALUNOS:
-            nome = aluno
-            notas = ALUNOS[aluno]
-            inserirNotas = []
+        for nota in notas:
+            disciplina = nota["Disciplina"]
+            nota1 = nota["Nota 1º trimestre"]
+            nota2 = nota["Nota 2º trimestre"]
+            nota3 = nota["Nota 3º trimestre"]
+            inserirNotas.append([nota1, nota2, nota3])
 
-            for nota in notas:
-                disciplina = nota["Disciplina"]
-                nota1 = nota["Nota 1º trimestre"]
-                nota2 = nota["Nota 2º trimestre"]
-                nota3 = nota["Nota 3º trimestre"]
-                inserirNotas.append([nota1, nota2, nota3])
-
-            #atualizar a planilha
-            aba = planilha.worksheet(nome)
-            intervalo = f'D6:F{5 + len(inserirNotas)}'
-            aba.update(range_name=intervalo, values=inserirNotas, value_input_option='USER_ENTERED')
-            print(f'Notas do(a) aluno(a) {nome} atualizadas com sucesso!')
-
-    atualizarDrive()
-    
+        #atualizar a planilha
+        aba = planilha.worksheet(nome)
+        intervalo = f'D6:F{5 + len(inserirNotas)}'
+        aba.update(range_name=intervalo, values=inserirNotas, value_input_option='USER_ENTERED')
+        print(f'Notas do(a) aluno(a) {nome} atualizadas com sucesso!')
 
 # Verifica se o arquivo está sendo executado diretamente
 if __name__ == "__main__":
@@ -319,7 +329,7 @@ if __name__ == "__main__":
         with open("config.json", "r") as config_file:
             config = json.load(config_file)
             print("Configurações carregadas com sucesso!")
-            #atualizar_drive(config)
+            atualizar_drive(config)
             #resumir_trimestres(config)
             print("----------------------------------------------------------")
             print("Notas dos alunos atualizadas com sucesso no Google Sheets!")
