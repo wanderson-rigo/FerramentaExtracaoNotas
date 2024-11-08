@@ -250,7 +250,7 @@ def extrair_notas_sigaa(config):
         
         notasOptativas = {}
 
-        '''
+        '''  inicio optativas '''
 
         # se tem optativas
         if tabelaOptativas != None:
@@ -272,7 +272,9 @@ def extrair_notas_sigaa(config):
                     n3tri = tds[7].text
                     notasOptativas[disciplina] = {'Nota 1º trimestre': n1tri, 'Nota 2º trimestre': n2tri, 'Nota 3º trimestre': n3tri}
         
-        '''
+       
+        ''' fim optativas '''
+
         notas_aluno['Optativas'] = notasOptativas
         notas_aluno['Obrigatorias'] = notasObrigatorias
 
@@ -285,6 +287,10 @@ def extrair_notas_sigaa(config):
         #pegou as notas do 
         
         print(f'Notas do aluno {aluno} capturadas com sucesso!')
+
+        # imprimindo as optativas do aluno
+        #imprimirOptativas(notas_aluno)
+
 
         notas_alunos.append(notas_aluno)
 
@@ -347,10 +353,18 @@ def extrair_notas_sigaa(config):
                 escritor_csv.writerow({'Nome': aluno['Nome'], 'Disciplina': disciplina, **notas})# desempacotamento de dicionário
 
             for disciplina, notas in aluno['Optativas'].items():
-                escritor_csv.writerow({'Nome': aluno['Nome'], 'Disciplina': disciplina, **notas})# desempacotamento de dicionário
+                # Marcar as optativas um '#' no início
+                nome_da_disciplina = ' # ' + disciplina
+                escritor_csv.writerow({'Nome': aluno['Nome'], 'Disciplina': nome_da_disciplina, **notas})# desempacotamento de dicionário
 
     print("Notas salvas com sucesso no arquivo 'notas_alunos.csv'!")
     browser.quit()
+
+def imprimirOptativas(notas_aluno):
+    #nome do aluno
+    print(f'Nome do aluno: {notas_aluno["Nome"]}')
+    for disciplina, notas in notas_aluno['Optativas'].items():
+        print(f'{disciplina}: {notas}')
 
 # Verifica se o arquivo está sendo executado diretamente
 if __name__ == "__main__":

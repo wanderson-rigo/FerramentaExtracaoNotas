@@ -3,6 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from gspread_formatting import *
 import csv
 import json
+import time
 
 ALUNOS = {}
 planilha = None
@@ -309,19 +310,43 @@ def atualizarDrive():
         nome = aluno
         notas = ALUNOS[aluno]
         inserirNotas = []
+        inserirNotasOpt = []
 
         for nota in notas:
             disciplina = nota["Disciplina"]
             nota1 = nota["Nota 1º trimestre"]
             nota2 = nota["Nota 2º trimestre"]
             nota3 = nota["Nota 3º trimestre"]
-            inserirNotas.append([nota1, nota2, nota3])
 
-        #atualizar a planilha
-        aba = planilha.worksheet(nome)
-        intervalo = f'D6:F{5 + len(inserirNotas)}'
-        aba.update(range_name=intervalo, values=inserirNotas, value_input_option='USER_ENTERED')
-        print(f'Notas do(a) aluno(a) {nome} atualizadas com sucesso!')
+            # se o nome da disciplina  conter # é uma optativa
+            if '#' in disciplina:
+                # quebrar o nome em " - " para pegar o nome da disciplina
+                disciplina = disciplina.split(" - ", 1)[1].strip()
+                inserirNotasOpt.append([disciplina, 'prof', nota1, nota2, nota3])
+            else:
+                inserirNotas.append([nota1, nota2, nota3])
+
+        # Tratar erro e temporização
+        try:
+            # Atualizar a planilha principal
+            aba = planilha.worksheet(nome)
+            intervalo = f'D6:F{5 + len(inserirNotas)}'
+            aba.update(range_name=intervalo, values=inserirNotas, value_input_option='USER_ENTERED')
+
+            # Pausa para evitar o limite de requisições
+            time.sleep(1/4)  # ajuste o tempo se necessário
+
+            # Atualizar a planilha das optativas
+            intervaloOpt = f'B{len(inserirNotas) + 6}:F{5 + len(inserirNotas) + len(inserirNotasOpt)}'
+            aba.update(range_name=intervaloOpt, values=inserirNotasOpt, value_input_option='USER_ENTERED')
+            #print(f'Notas optativas do(a) aluno(a) {nome} atualizadas com sucesso!')
+
+            print(f'Notas do(a) aluno(a) {nome} atualizadas com sucesso!')
+            # Pausa adicional para evitar o limite de requisições
+            time.sleep(1/4)  # ajuste o tempo se necessário
+
+        except Exception as e:
+            print(f'Ocorreu um erro ao atualizar as notas do(a) aluno(a) {nome}: {e}')
 
 # Verifica se o arquivo está sendo executado diretamente
 if __name__ == "__main__":
