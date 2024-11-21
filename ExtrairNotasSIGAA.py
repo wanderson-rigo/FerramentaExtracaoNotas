@@ -62,16 +62,17 @@ def extrair_notas_sigaa(config):
     WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, "//li[@class='tecnicoIntegrado on']")))
     browser.find_element(By.XPATH, "//a[@href='/sigaa/verMenuTecnicoIntegrado.do']").click()
 
+    # Ciente
+    browser.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
+
     try:   
-        # problema no perfil da Rosicler
+        # problema no perfil da Rosicler: Secretario
         browser.find_element(By.XPATH, "//span[text()='Aluno']").click()
         browser.find_element(By.ID, "menuTecnicoForm:emitirBoletimTecnicoDisc").click()        
     except NoSuchElementException:
         # meu perfil de secretário
         browser.find_element(By.ID, "menuTecnicoForm:emitirBoletimTecnicoDiscMenuPedagogico").click()
 
-    # Ciente
-    browser.find_element(By.CSS_SELECTOR, "button.btn.btn-primary").click()
 
     def pegar_notas_aluno(aluno):
 
