@@ -12,7 +12,7 @@ def pedir_senha():
         senha = simpledialog.askstring("Senha", "Digite sua senha do SIGAA:", initialvalue="", show='*')
         return senha
 
-def extrair_notas_sigaa(config):
+def extrair_notas_sigaa(config, incluir_optativas):
     URL = config.get("URL")
     USERNAME = config.get("USERNAME")
     PASSWORD = config.get("PASSWORD")
@@ -360,10 +360,11 @@ def extrair_notas_sigaa(config):
             for disciplina, notas in aluno['Obrigatorias'].items():
                 escritor_csv.writerow({'Nome': aluno['Nome'], 'Disciplina': disciplina, **notas})# desempacotamento de dicionário
 
-            for disciplina, notas in aluno['Optativas'].items():
-                # Marcar as optativas um '#' no início
-                nome_da_disciplina = ' # ' + disciplina
-                escritor_csv.writerow({'Nome': aluno['Nome'], 'Disciplina': nome_da_disciplina, **notas})# desempacotamento de dicionário
+            if incluir_optativas:
+                for disciplina, notas in aluno['Optativas'].items():
+                    # Marcar as optativas um '#' no início
+                    nome_da_disciplina = ' # ' + disciplina
+                    escritor_csv.writerow({'Nome': aluno['Nome'], 'Disciplina': nome_da_disciplina, **notas})# desempacotamento de dicionário
 
     print("Notas salvas com sucesso no arquivo 'notas_alunos.csv'!")
     browser.quit()
