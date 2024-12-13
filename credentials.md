@@ -27,7 +27,7 @@ Passos:
 
         Este arquivo deve ser renomeado para "credentials.json" e colocando junto do arquivo ".exe" do programa
 
-    Ele será usada pelo programa para se autenticar com as APIs do Google.
+        Ele será usada pelo programa para se autenticar com as APIs do Google.
 
     4) Use o e-mail associado à conta de serviço (visível na página de Contas de Serviço) e adicione-o como editor na sua planilha do Google Drive:
         Abra a planilha no Google Drive.

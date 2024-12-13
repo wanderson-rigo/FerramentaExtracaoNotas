@@ -18,6 +18,8 @@ Criei em https://console.cloud.google.com/apis/credentials?authuser=1 uma conta 
 
 O e-mail é notas-24@planar-sunrise-422311-h9.iam.gserviceaccount.com Ele deve ser incluído com acesso de editor na planilha do Google Drive para que as notas possam ser inseridas.
 
+Para maiores informações de como criar o arquivo *credentials.json* [a link](https://github.com/wanderson-rigo/FerramentaExtracaoNotas/blob/main/credentials.md)
+
 As configurações a serem definidas no arquivo *config.json* são:
 
 - "URL": "https://sig.ifc.edu.br/sigaa/verTelaLogin.do", do SIGAA
