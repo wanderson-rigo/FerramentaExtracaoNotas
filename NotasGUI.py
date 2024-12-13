@@ -63,6 +63,11 @@ class InterfaceGrafica:
             with open("config.json", "r") as config_file:
                 self.configuracoes = json.load(config_file)
             print("Configurações carregadas com sucesso!")
+            # imprimir as configurações carregadas
+            print("----------------------------------------------------------")
+            print("Configurações atuais:")
+            print(json.dumps(self.configuracoes, indent=4))
+            print("----------------------------------------------------------")             
         except Exception as e:
             print("Erro ao carregar as configurações:", e)
 
