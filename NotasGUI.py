@@ -5,7 +5,6 @@ import json
 import ExtrairNotasSIGAA  # Importe o módulo ExtrairNotasSIGAA.py
 import DigitarDrive  # Importe o módulo DigitarDrive.py
 
-
 class InterfaceGrafica:
     def __init__(self, root):
         self.root = root

@@ -4,7 +4,7 @@ Este sistema foi desenvolvido pelo prof. Wanderson Rigo do IFC-Videira para capt
 
 O arquivo CSV gerado pode ser manipulado de forma independente para geração de estatíticas, por exemplo.
 
-Para usar o sistema é preciso se definir algumas configurações.
+Para usar o sistema é preciso ter acesso de *Secretário* no SIGAA e também se definir algumas configurações.
 
 O arquivo credentials.json foi gerado pelo Google Console.
 
