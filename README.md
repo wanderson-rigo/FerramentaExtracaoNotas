@@ -14,11 +14,11 @@ Para a extração das notas de cada turma, não esqueça de atualizar os nomes d
 
 Programado em Python valendo-se principalmente das APIs selenium e gspread.
 
-Criei em https://console.cloud.google.com/apis/credentials?authuser=1 uma conta de serviço e credenciais do cliente OAuth 2.0 cujo para acessar as APIs do Google. 
+Criei em https://console.cloud.google.com/apis/credentials?authuser=1 uma conta de serviço e credenciais do cliente OAuth 2.0  para acessar as APIs do Google. 
 
-O e-mail é notas-24@planar-sunrise-422311-h9.iam.gserviceaccount.com Ele deve ser incluído com acesso de editor na planilha do Google Drive para que as notas possam ser inseridas.
+O e-mail da conta de serviço criado é notas-24@planar-sunrise-422311-h9.iam.gserviceaccount.com Ele deve ser incluído com acesso de editor na planilha do Google Drive para que as notas possam ser inseridas.
 
-Para maiores informações de como criar o arquivo *credentials.json* [a link](https://github.com/wanderson-rigo/FerramentaExtracaoNotas/blob/main/credentials.md)
+Para maiores informações de como criar o arquivo *credentials.json* ver [aqui](https://github.com/wanderson-rigo/FerramentaExtracaoNotas/blob/main/credentials.md)
 
 As configurações a serem definidas no arquivo *config.json* são:
 
