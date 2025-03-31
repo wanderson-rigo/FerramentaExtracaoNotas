@@ -1,0 +1,9 @@
+{
+    "URL": "https://sig.ifc.edu.br/sigaa/verTelaLogin.do",
+    "USERNAME": "wanderson.rigo",
+    "PASSWORD": "",
+    "STUDANTS_NAMES": "nomes/alunos.txt",
+    "STUDANTS_CLASS": "TERCEIRO_ANO",
+    "STUDANTS_NOTES": "notas/notas_alunos.csv",
+    "SHEET_URL": "https://docs.google.com/spreadsheets/d/1h9hdgnKjfX4YC-8GRa9nomsZbayPBQnRYH3A7v2PQ38"
+  }
