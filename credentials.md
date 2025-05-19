@@ -13,6 +13,16 @@ Passos:
 
         Daí preencha os campos necessários.
 
+    2.5) Ative a Google Sheets API para o projeto:
+
+        Acesse o link: https://console.developers.google.com/apis/api/sheets.googleapis.com/overview?project=[ID do projeto]
+
+        Substitua [ID do projeto] pelo ID do seu projeto no Google Cloud (geralmente aparece no topo da página do Console).
+
+        Clique no botão “Ativar” para ativar a API.
+
+        Este passo é essencial para que o programa consiga acessar planilhas usando a API.
+
     3) Gere uma chave de credenciais no formato JSON:
 
         Depois de criar a conta de serviço, clique nela.
