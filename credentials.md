@@ -21,7 +21,7 @@ Passos:
 
         Clique no botão “Ativar” para ativar a API.
 
-        Este passo é essencial para que o programa consiga acessar planilhas usando a API.
+        Este passo é essencial para que o programa consiga acessar planilhas usando a API. Ok?
 
     3) Gere uma chave de credenciais no formato JSON:
 
