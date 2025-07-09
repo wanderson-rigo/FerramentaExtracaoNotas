@@ -28,6 +28,7 @@ As configurações a serem definidas no arquivo *config.json* são:
 - "STUDANTS_NAMES": "alunos.txt", nome do arquivo que contém os nomes dos estudantes.
 - "STUDANTS_CLASS": "PRIMEIRO_ANO", o ano dos estudantes. Pode ser: PRIMEIRO_ANO, SEGUNDO_ANO, TERCEIRO_ANO.
 - "STUDANTS_NOTES": "notas_alunos.csv", 
+- "REAV_NOTES": "durante", define quando ocorre a Reavaliação. Pode ser: "final" ou "durante". Ex: em Videira é no final e em Fraiburgo é durante o trimestre. Esta configuração orienta o programa a buscar as notas nas colunas corretas no boletim, acessando, se "final", a 3ª, 6ª e 9ª colunas ou se "durante", as colunas 7ª, 14ª e 21ª do boletim. A coluna 0 (zero) é do COMPONENTE CURRICULAR.
 - "SHEET_URL": "https://docs.google.com/spreadsheets/d/1gdAZspevEDd-Nd58um7eEeCd16d9z4P390en9hqC31w", o link para a planilha de notas no Google Drive
 
 As cópias das planilhas estão em https://drive.google.com/drive/u/1/folders/1wUuauEh7SkCT5xZWckkaOf3wm87MgNXJ

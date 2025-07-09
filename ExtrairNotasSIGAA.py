@@ -24,6 +24,7 @@ def extrair_notas_sigaa(config, incluir_optativas):
 
     STUDANTS_NAMES = config.get("STUDANTS_NAMES")
     STUDANTS_NOTES = config.get("STUDANTS_NOTES")
+    REAV_NOTES = config.get("REAV_NOTES")
 
 
     # Defina as variáveis
@@ -247,11 +248,40 @@ def extrair_notas_sigaa(config, incluir_optativas):
                 tds[3] #se não existir, igorna as notas disciplina
             except IndexError:
                 continue
+            
+            # se no boletim tem reav a cada avaliação, como em Fraiburgo
+            if REAV_NOTES == "durante":
+                print("Reav a cada avaliação, como em Fraiburgo")
+                # se não há reprovação
+                n1tri = tds[7].text
+                n2tri = tds[14].text
+                n3tri = tds[21].text
 
-            # se não há reprovação
-            n1tri = tds[3].text
-            n2tri = tds[6].text
-            n3tri = tds[9].text
+            # se tem reav só no final, como Videira
+            if REAV_NOTES == "final":
+                print("Reav ao final do trimestre, como em Videira")
+                # se não há reprovação
+                n1tri = tds[3].text
+                n2tri = tds[6].text
+                n3tri = tds[9].text
+
+                '''' colunas no boletim de Videira
+
+                    0 - COMPONENTE CURRICULAR
+                    1 - Trimestre 1
+                    2 - Trimestre 1 - Reavaliação
+                    3 - Trimestre 1 - Média Parcial
+                    4 - Trimestre 2 	
+                    5 - Trimestre 2 - Reavaliação
+                    6 - Trimestre 2 - Média Parcial
+                    7 - Trimestre 3 	
+                    8 - Trimestre 3 - Reavaliação
+                    9 - Trimestre 3 - Média Parcial
+                    10 - Média Final 	
+                    11 - Faltas
+                    12 - Situação
+
+                '''
 
             notasObrigatorias[disciplina] = {'Nota 1º trimestre': n1tri, 'Nota 2º trimestre': n2tri, 'Nota 3º trimestre': n3tri}
 

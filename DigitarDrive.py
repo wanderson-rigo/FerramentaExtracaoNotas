@@ -240,7 +240,21 @@ def carregarCSV(config):
     # Autenticar e acessar a planilha
     gc = gspread.authorize(credentials)
     global planilha
-    planilha = gc.open_by_url(SHEET_URL)
+
+    # capturar erros de permissão
+    try:
+        planilha = gc.open_by_url(SHEET_URL)
+    except gspread.exceptions.APIError as e:
+        print(f"Erro ao acessar a planilha: {e}")
+        return
+    except gspread.exceptions.SpreadsheetNotFound as e: 
+        print(f"Planilha não encontrada: {e}")  
+        return
+    except gspread.exceptions.GSpreadException as e:
+        print(f"Erro ao acessar a planilha: {e}")
+        return
+    except Exception as e:
+        print(f"Erro inesperado: {e}")        
 
     #carregar lista de alunos do arquivo alunos.txt
     global ALUNOS
