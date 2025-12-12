@@ -10,6 +10,8 @@ O arquivo credentials.json foi gerado pelo Google Console.
 
 Para a extração das notas de cada turma, não esqueça de atualizar os nomes dos alunos, e o link para a planilha que será usada no conselho de classe.
 
+![screenshot](img/image.png)
+
 ## Detalhes técnicos
 
 Programado em Python valendo-se principalmente das APIs selenium e gspread.
