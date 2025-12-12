@@ -86,7 +86,7 @@ class InterfaceGrafica:
 
     def carregar_configuracoes(self):
         try:
-            with open("configVD.json", "r") as config_file:
+            with open("config.json", "r") as config_file:
                 self.configuracoes = json.load(config_file)
             print("Configurações carregadas com sucesso!")
             # imprimir as configurações carregadas
