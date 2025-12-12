@@ -12,7 +12,7 @@ def pedir_senha():
         senha = simpledialog.askstring("Senha", "Digite sua senha do SIGAA:", initialvalue="", show='*')
         return senha
 
-def extrair_notas_sigaa(config, incluir_optativas):
+def extrair_notas_sigaa(config, incluir_optativas, status_lista):
     URL = config.get("URL")
     USERNAME = config.get("USERNAME")
     PASSWORD = config.get("PASSWORD")
@@ -69,10 +69,12 @@ def extrair_notas_sigaa(config, incluir_optativas):
     try:   
         # problema no perfil da Rosicler: Secretario
         browser.find_element(By.XPATH, "//span[text()='Aluno']").click()
-        browser.find_element(By.ID, "menuTecnicoForm:emitirBoletimTecnicoDisc").click()        
+        #browser.find_element(By.ID, "menuTecnicoForm:emitirBoletimTecnicoDisc").click()
+        browser.find_element(By.XPATH,"//a[normalize-space(text())='Emitir Boletim']").click()
     except NoSuchElementException:
         # meu perfil de secretário
-        browser.find_element(By.ID, "menuTecnicoForm:emitirBoletimTecnicoDiscMenuPedagogico").click()
+        #browser.find_element(By.ID, "menuTecnicoForm:emitirBoletimTecnicoDiscMenuPedagogico").click()
+        print("Erro: não conseguiu clicar em Aluno/Emitir Boletim!")
 
 
     def pegar_notas_aluno(aluno):
@@ -106,13 +108,13 @@ def extrair_notas_sigaa(config, incluir_optativas):
                 nome = celulas[3].text # nome do aluno
                 print(nome)
 
-                ativo = celulas[5].text # situação do aluno
-                print(ativo)
+                status = celulas[5].text # situação do aluno
+                print(status)
 
                 ação = celulas[6] # ação de clicar no aluno
 
                 #se o nome do aluno for igual ao nome do aluno que está sendo procurado, e ele for ATIVO clicar nele
-                if (nome == aluno) and (ativo == "ATIVO"):
+                if (nome == aluno) and (status in  status_lista):
                     botoes_selecionar = ação.find_element(By.XPATH, ".//input[@title='Selecionar Discente']")
                     botoes_selecionar.click()
                     break

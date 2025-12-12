@@ -45,6 +45,33 @@ class InterfaceGrafica:
             offvalue=False
         )
 
+        # Menu de opções com checkbox para os status 
+        # (ATIVO, CADASTRADO, CONCLUÍDO, TRANCADO, CANCELADO, FORMANDO, 
+        # FORMADO, EM HOMOLOGAÇÃO, DEFENDIDO, ATIVO EM DEPENDÊNCIA, PRÉ-CADASTRADO) 
+        self.status_ativo = tk.BooleanVar(value=True)  # Estado inicial do checkbox (não marcado por padrão)
+        self.status_options_menu = tk.Menu(self.menu, tearoff=0)
+        self.menu.add_cascade(label="Status Aluno", menu=self.status_options_menu)
+        self.status_options_menu.add_checkbutton(
+            label="ATIVO",
+            variable=self.status_ativo,
+            onvalue=True,
+            offvalue=False
+        )
+        self.status_formando = tk.BooleanVar(value=False)  # Estado inicial do checkbox (não marcado por padrão)
+        self.status_options_menu.add_checkbutton(
+            label="FORMANDO",
+            variable=self.status_formando,
+            onvalue=True,
+            offvalue=False
+        )
+        self.status_formado = tk.BooleanVar(value=False)  # Estado inicial do checkbox (não marcado por padrão)
+        self.status_options_menu.add_checkbutton(
+            label="FORMADO",
+            variable=self.status_formado,
+            onvalue=True,
+            offvalue=False
+        )
+
         # Menu de ajuda
         self.help_menu = tk.Menu(self.menu, tearoff=0)
         self.menu.add_cascade(label="Ajuda", menu=self.help_menu)
@@ -59,7 +86,7 @@ class InterfaceGrafica:
 
     def carregar_configuracoes(self):
         try:
-            with open("config.json", "r") as config_file:
+            with open("configVD.json", "r") as config_file:
                 self.configuracoes = json.load(config_file)
             print("Configurações carregadas com sucesso!")
             # imprimir as configurações carregadas
@@ -75,8 +102,20 @@ class InterfaceGrafica:
         if self.configuracoes:
             try:
                 incluir_optativas = self.extrair_optativas.get()
+
+                status_lista = []
+
+                if self.status_ativo.get():
+                    status_lista.append("ATIVO")
+
+                if self.status_formando.get():
+                    status_lista.append("FORMANDO")
+
+                if self.status_formado.get():
+                    status_lista.append("FORMADO")
+
                 print(f"Incluir disciplinas optativas: {incluir_optativas}")
-                ExtrairNotasSIGAA.extrair_notas_sigaa(self.configuracoes, incluir_optativas)
+                ExtrairNotasSIGAA.extrair_notas_sigaa(self.configuracoes, incluir_optativas, status_lista)
                 print("----------------------------------------------------------")
                 print("Notas extraídas com sucesso do SIGAA!")
             except Exception as e:
